@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover Terengganu - Travel Agent Finder</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-container">
+                    <h1>Discover Terengganu</h1>
+                    <p class="tagline">Find your perfect travel experience in Malaysia's hidden gem</p>
+                </div>
+                <div class="header-image">
+                    <img src="/api/placeholder/300/200" alt="Terengganu scenery" />
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container main-content">
+        <div class="tabs">
+            <div class="tab active" onclick="openTab('search')">Find Travel Agents</div>
+            <div class="tab" onclick="openTab('attractions')">Top Attractions</div>
+            <div class="tab" onclick="openTab('evaluation')">Service Ratings</div>
+            <div class="tab" onclick="openTab('about')">About</div>
+        </div>
+
+        <div id="search" class="tab-content active">
+            <div class="search-container">
+                <div class="intro-text">
+                    <h2>Find Your Perfect Travel Partner</h2>
+                    <p>Let us help you discover the best travel agents in Terengganu who can create your dream vacation experience.</p>
+                </div>
+                
+                <form class="search-form" id="recommendForm">
+                    <div class="form-group">
+                        <label for="query">What are you looking for?</label>
+                        <input type="text" id="query" name="query" placeholder="e.g., island hopping, cultural tours, diving, 4.5+ rated">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group location-select">
+                            <label for="area">Where in Terengganu?</label>
+                            <select id="area" name="area">
+                                <option value="">All locations</option>
+                                <option value="Kuala Terengganu">Kuala Terengganu</option>
+                                <option value="Kuala Nerus">Kuala Nerus</option>
+                                <option value="Setiu">Setiu</option>
+                                <option value="Besut">Besut</option>
+                                <option value="Marang">Marang</option>
+                                <option value="Kemaman">Kemaman</option>
+                                <option value="Dungun">Dungun</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group min-rating">
+                            <label for="minRating">Minimum Rating</label>
+                            <select id="minRating" name="minRating">
+                                <option value="">Any rating</option>
+                                <option value="5">5.0 ★★★★★</option>
+                                <option value="4.5">4.5+ ★★★★½</option>
+                                <option value="4">4.0+ ★★★★</option>
+                                <option value="3.5">3.5+ ★★★½</option>
+                                <option value="3">3.0+ ★★★</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="primary-btn">Find Travel Agents</button>
+                </form>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Finding the best travel agents for you...</p>
+            </div>
+
+            <div class="results-container" id="resultsContainer">
+                <h2>Recommended Travel Agents</h2>
+                <div id="resultsGrid">
+                    <!-- Results will be inserted here -->
+                </div>
+                <div class="no-results" id="noResults">
+                    <p>No travel agents found matching your criteria. Try broadening your search or selecting a different area.</p>
+                    <button onclick="resetSearch()" class="secondary-btn">Reset Search</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="attractions" class="tab-content">
+            <div class="attractions-container">
+                <h2>Must-Visit Destinations in Terengganu</h2>
+                <p class="intro-text">Explore these breathtaking attractions that make Terengganu a must-visit destination.</p>
+                
+                <div class="attraction-grid">
+                    <div class="attraction-card">
+                        <div class="attraction-image">
+                            <img src="/api/placeholder/300/200" alt="Perhentian Islands" />
+                        </div>
+                        <div class="attraction-info">
+                            <h3>Perhentian Islands</h3>
+                            <p>Crystal clear waters, pristine beaches, and amazing diving spots.</p>
+                            <span class="badge">Islands</span>
+                            <span class="badge">Diving</span>
+                        </div>
+                    </div>
+                    
+                    <div class="attraction-card">
+                        <div class="attraction-image">
+                            <img src="/api/placeholder/300/200" alt="Redang Island" />
+                        </div>
+                        <div class="attraction-info">
+                            <h3>Redang Island</h3>
+                            <p>Famous for its white sandy beaches and rich marine life.</p>
+                            <span class="badge">Islands</span>
+                            <span class="badge">Snorkeling</span>
+                        </div>
+                    </div>
+                    
+                    <div class="attraction-card">
+                        <div class="attraction-image">
+                            <img src="/api/placeholder/300/200" alt="Crystal Mosque" />
+                        </div>
+                        <div class="attraction-info">
+                            <h3>Crystal Mosque</h3>
+                            <p>A stunning architectural marvel made of crystal, glass and steel.</p>
+                            <span class="badge">Culture</span>
+                            <span class="badge">Architecture</span>
+                        </div>
+                    </div>
+                    
+                    <div class="attraction-card">
+                        <div class="attraction-image">
+                            <img src="/api/placeholder/300/200" alt="Terengganu State Museum" />
+                        </div>
+                        <div class="attraction-info">
+                            <h3>Terengganu State Museum</h3>
+                            <p>The largest museum in Southeast Asia showcasing local heritage.</p>
+                            <span class="badge">Culture</span>
+                            <span class="badge">History</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="evaluation" class="tab-content">
+            <div class="evaluation-container">
+                <h2>Travel Agent Service Ratings</h2>
+                <p class="intro-text">See how our recommended travel agents are rated by real tourists.</p>
+                
+                <div class="evaluation-overview">
+                    <div class="rating-metric">
+                        <h3>Average Customer Satisfaction</h3>
+                        <div class="rating-display">
+                            <div class="rating-number">4.7</div>
+                            <div class="rating-stars">★★★★★</div>
+                        </div>
+                        <p>Based on all agent reviews</p>
+                    </div>
+                    
+                    <div class="rating-metric">
+                        <h3>Response Time</h3>
+                        <div class="rating-display">
+                            <div class="rating-number">92%</div>
+                        </div>
+                        <p>Respond within 24 hours</p>
+                    </div>
+                </div>
+                
+                <div class="evaluation-system">
+                    <h3>System Accuracy</h3>
+                    <p>Our recommendation system is regularly evaluated to ensure you get the best matches:</p>
+                    <button id="evaluateButton" class="secondary-btn">Check System Accuracy</button>
+                    
+                    <div id="evaluationResults" class="evaluation-results">
+                        <h4>Root Mean Square Error (RMSE)</h4>
+                        <p class="metric-value" id="rmseValue">...</p>
+                        <p class="metric-explanation">Lower values indicate more accurate recommendations (scale 0-5).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="about" class="tab-content">
+            <div class="about-container">
+                <h2>About Terengganu</h2>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>Terengganu is a coastal state in eastern Peninsular Malaysia, known for its stunning islands, beautiful beaches, rich cultural heritage, and delicious cuisine.</p>
+                        
+                        <h3>Why Visit Terengganu?</h3>
+                        <ul class="feature-list">
+                            <li><span class="feature-icon">🏝️</span> Beautiful islands with crystal clear waters</li>
+                            <li><span class="feature-icon">🏊‍♀️</span> World-class diving and snorkeling spots</li>
+                            <li><span class="feature-icon">🏛️</span> Rich cultural heritage and historical sites</li>
+                            <li><span class="feature-icon">🥘</span> Delicious authentic Malay cuisine</li>
+                            <li><span class="feature-icon">🛍️</span> Traditional crafts and souvenirs</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="about-map">
+                        <h3>Terengganu Areas</h3>
+                        <div class="map-image">
+                            <img src="/api/placeholder/400/300" alt="Map of Terengganu" />
+                        </div>
+                        <div class="map-legend">
+                            <p><strong>Main regions:</strong> Kuala Terengganu, Kuala Nerus, Setiu, Besut, Marang, Kemaman, Dungun</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="travel-tips">
+                    <h3>Travel Tips</h3>
+                    <div class="tips-grid">
+                        <div class="tip-item">
+                            <h4>Best Time to Visit</h4>
+                            <p>March to October for clear skies and calm seas. Avoid the monsoon season (November to February).</p>
+                        </div>
+                        <div class="tip-item">
+                            <h4>Local Transportation</h4>
+                            <p>Taxis and ride-sharing apps are available in major areas. Consider renting a car for exploring multiple locations.</p>
+                        </div>
+                        <div class="tip-item">
+                            <h4>Currency</h4>
+                            <p>Malaysian Ringgit (MYR). Credit cards are accepted at most hotels and larger establishments.</p>
+                        </div>
+                        <div class="tip-item">
+                            <h4>Language</h4>
+                            <p>Malay is the official language, but English is widely understood in tourist areas.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Discover Terengganu</h3>
+                    <p>Your gateway to Malaysia's east coast paradise</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#" onclick="openTab('search')">Find Travel Agents</a></li>
+                        <li><a href="#" onclick="openTab('attractions')">Attractions</a></li>
+                        <li><a href="#" onclick="openTab('about')">About Terengganu</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact Info</h3>
+                    <p>Tourism Malaysia Terengganu Office<br>
+                    Lot 3708, Jalan Padang Hiliran<br>
+                    21100 Kuala Terengganu<br>
+                    Malaysia</p>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2025 Discover Terengganu. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Tab functionality
+        function openTab(tabName) {
+            const tabContents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove("active");
+            }
+            
+            const tabs = document.getElementsByClassName("tab");
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            event.currentTarget.classList.add("active");
+            
+            // Scroll to top of tab content
+            window.scrollTo({
+                top: document.querySelector('.tabs').offsetTop - 20,
+                behavior: 'smooth'
+            });
+        }
+
+        // Reset search form
+        function resetSearch() {
+            document.getElementById("query").value = "";
+            document.getElementById("area").selectedIndex = 0;
+            document.getElementById("minRating").selectedIndex = 0;
+            document.getElementById("noResults").style.display = "none";
+        }
+
+        // Form submission
+        document.getElementById("recommendForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            
+            const query = document.getElementById("query").value;
+            const area = document.getElementById("area").value;
+            const minRating = document.getElementById("minRating").value;
+            
+            if (!query && !area && !minRating) {
+                alert("Please enter a search query, select an area, or choose a minimum rating.");
+                return;
+            }
+            
+            // Show loading indicator
+            document.getElementById("loading").style.display = "flex";
+            document.getElementById("resultsContainer").style.display = "none";
+            
+            // Prepare form data
+            const formData = new FormData();
+            if (query) formData.append("query", query);
+            if (area) formData.append("area", area);
+            if (minRating) formData.append("minRating", minRating);
+            
+            // Send request
+            fetch("/recommend", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("loading").style.display = "none";
+                document.getElementById("resultsContainer").style.display = "block";
+                
+                const resultsGrid = document.getElementById("resultsGrid");
+                resultsGrid.innerHTML = "";
+                
+                if (data.error || data.length === 0) {
+                    document.getElementById("noResults").style.display = "block";
+                    resultsGrid.style.display = "none";
+                } else {
+                    document.getElementById("noResults").style.display = "none";
+                    resultsGrid.style.display = "grid";
+                    
+                    data.forEach(agent => {
+                        const card = document.createElement("div");
+                        card.className = "agent-card";
+                        
+                        const validity = agent.validity === 'Active' ? 
+                            '<span class="status-badge active">Active</span>' : 
+                            '<span class="status-badge inactive">Inactive</span>';
+                        
+                        card.innerHTML = `
+                            <div class="agent-header">
+                                <h3>${agent.name}</h3>
+                                ${validity}
+                            </div>
+                            <div class="agent-details">
+                                <div class="agent-info">
+                                    <p><strong>Category:</strong> ${agent.category || 'N/A'}</p>
+                                    <p><strong>Area:</strong> ${agent.area || 'N/A'}</p>
+                                    <p><strong>Type:</strong> ${agent.type || 'N/A'}</p>
+                                </div>
+                                <div class="agent-rating">
+                                    <p class="rating-value">${formatRating(agent.rating)}</p>
+                                </div>
+                            </div>
+                            <div class="agent-actions">
+                                <button class="contact-btn">Contact Agent</button>
+                            </div>
+                        `;
+                        
+                        resultsGrid.appendChild(card);
+                    });
+                }
+            })
+            .catch(error => {
+                document.getElementById("loading").style.display = "none";
+                alert("An error occurred while fetching recommendations. Please try again.");
+                console.error("Error:", error);
+            });
+        });
+
+        // Format rating with stars
+        function formatRating(rating) {
+            if (!rating || rating === 0 || rating === "0") {
+                return "No reviews yet";
+            }
+            
+            const ratingNum = parseFloat(rating);
+            const fullStars = Math.floor(ratingNum);
+            const halfStar = ratingNum % 1 >= 0.5;
+            
+            let starsHTML = '';
+            
+            for (let i = 0; i < fullStars; i++) {
+                starsHTML += '★';
+            }
+            
+            if (halfStar) {
+                starsHTML += '½';
+            }
+            
+            return `${ratingNum.toFixed(1)} <span class="stars">${starsHTML}</span>`;
+        }
+
+        // System evaluation
+        document.getElementById("evaluateButton").addEventListener("click", function() {
+            document.getElementById("evaluationResults").style.display = "none";
+            document.getElementById("evaluateButton").disabled = true;
+            document.getElementById("evaluateButton").textContent = "Evaluating...";
+            
+            fetch("/evaluate")
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("evaluateButton").disabled = false;
+                document.getElementById("evaluateButton").textContent = "Check System Accuracy";
+                document.getElementById("evaluationResults").style.display = "block";
+                
+                if (data.error) {
+                    document.getElementById("rmseValue").textContent = "Error: " + data.error;
+                } else {
+                    document.getElementById("rmseValue").textContent = data.rmse;
+                }
+            })
+            .catch(error => {
+                document.getElementById("evaluateButton").disabled = false;
+                document.getElementById("evaluateButton").textContent = "Check System Accuracy";
+                alert("An error occurred during evaluation. Please try again.");
+                console.error("Error:", error);
+            });
+        });
+    </script>
+</body>
+</html>
